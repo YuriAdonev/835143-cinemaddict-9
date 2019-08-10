@@ -7,8 +7,8 @@ import {createShowMoreTemplate} from './components/show-more';
 import {createFilmCardTemplate} from './components/film-card';
 import {createFilmDetailsTemplate} from './components/film-details';
 
-const render = (container, block) => {
-  container.insertAdjacentHTML(`beforeend`, block);
+const render = (container, block, place = `beforeend`) => {
+  container.insertAdjacentHTML(place, block);
 };
 
 render(document.querySelector(`.header`), createSearchTemplate());
@@ -30,4 +30,4 @@ for (let i = 0; i < 2; i++) {
   render(document.querySelectorAll(`.films-list__container`)[2], createFilmCardTemplate());
 }
 
-render(document.body, createFilmDetailsTemplate());
+render(document.querySelector(`.footer`), createFilmDetailsTemplate(), `afterend`);
