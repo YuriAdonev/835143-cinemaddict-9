@@ -30,4 +30,4 @@ for (let i = 0; i < 2; i++) {
   render(document.querySelectorAll(`.films-list__container`)[2], createFilmCardTemplate());
 }
 
-render(document.body, createFilmDetailsTemplate);
+render(document.body, createFilmDetailsTemplate());
