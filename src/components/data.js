@@ -45,10 +45,18 @@ const filterTitles = [
   `Stats`,
 ];
 
+const getRandomNumber = (maxValue) => {
+  return Math.floor(Math.random() * maxValue);
+};
+
+const getRandomBoolean = () => {
+  return Boolean(Math.round(Math.random()));
+};
+
 const generateDescription = () => {
   const newDescription = [];
-  for (let i = 0; i <= (Math.floor(Math.random() * 2) + 1); i++) {
-    newDescription.push(descriptions[Math.floor(Math.random() * descriptions.length)]);
+  for (let i = 0; i <= (getRandomNumber(2) + 1); i++) {
+    newDescription.push(descriptions[getRandomNumber(descriptions.length)]);
   }
   return newDescription.join(` `);
 };
@@ -78,7 +86,7 @@ const generateCard = (count) => ({
         `sleeping.png`,
         `puke.png`,
         `angry.png`,
-      ][Math.floor(Math.random() * 4)],
+      ][getRandomNumber(4)],
       text: `Interesting setting and a good cast`,
       author: `Tim Macoveev`,
       date: `3 days ago`,
@@ -90,7 +98,7 @@ const generateCard = (count) => ({
         `puke.png`,
         `angry.png`,
         `trophy.png`,
-      ][Math.floor(Math.random() * 5)],
+      ][getRandomNumber(5)],
       text: `Interesting setting and a good cast`,
       author: `Tim Macoveev`,
       date: `3 days ago`,
@@ -104,10 +112,10 @@ const generateCard = (count) => ({
     `the-dance-of-life.jpg`,
     `the-great-flamarion.jpg`,
     `the-man-with-the-golden-arm.jpg`,
-  ][Math.floor(Math.random() * 7)],
-  isWatchlist: Boolean(Math.round(Math.random())),
-  isFavorites: Boolean(Math.round(Math.random())),
-  isWatched: Boolean(Math.round(Math.random())),
+  ][getRandomNumber(7)],
+  isWatchlist: getRandomBoolean(),
+  isFavorites: getRandomBoolean(),
+  isWatched: getRandomBoolean(),
 });
 
 const generateCardsList = () => {
@@ -116,64 +124,38 @@ const generateCardsList = () => {
   }
 };
 
+const makeFilterItem = (title, link, count, isActive, isAdditional, haveCount) => {
+  return {
+    title,
+    link,
+    count,
+    isActive,
+    isAdditional,
+    haveCount,
+  };
+};
+
 const generateFilters = () => {
   filterTitles.forEach((filter) => {
-    let title;
-    let link;
-    let count;
-    let isActive;
-    let isAdditional;
-    let haveCount;
+    let filterItem;
     switch (filter) {
       case `All movies`:
-        title = filter;
-        link = `all`;
-        count = ``;
-        isActive = true;
-        isAdditional = false;
-        haveCount = false;
+        filterItem = makeFilterItem(filter, `all`, ``, true, false, false);
         break;
       case `Watchlist`:
-        title = filter;
-        link = filter.toLowerCase();
-        count = cards.filter((card) => card.isWatchlist).length;
-        isActive = false;
-        isAdditional = false;
-        haveCount = true;
+        filterItem = makeFilterItem(filter, filter.toLowerCase(), cards.filter((card) => card.isWatchlist).length, false, false, true);
         break;
       case `History`:
-        title = filter;
-        link = filter.toLowerCase();
-        count = cards.filter((card) => card.isWatched).length;
-        isActive = false;
-        isAdditional = false;
-        haveCount = true;
+        filterItem = makeFilterItem(filter, filter.toLowerCase(), cards.filter((card) => card.isWatched).length, false, false, true);
         break;
       case `Favorites`:
-        title = filter;
-        link = filter.toLowerCase();
-        count = cards.filter((card) => card.isFavorites).length;
-        isActive = false;
-        isAdditional = false;
-        haveCount = true;
+        filterItem = makeFilterItem(filter, filter.toLowerCase(), cards.filter((card) => card.isFavorites).length, false, false, true);
         break;
       case `Stats`:
-        title = filter;
-        link = filter.toLowerCase();
-        count = ``;
-        isActive = false;
-        isAdditional = true;
-        haveCount = false;
+        filterItem = makeFilterItem(filter, filter.toLowerCase(), ``, false, true, false);
         break;
     }
-    filters.push({
-      title,
-      count,
-      link,
-      isActive,
-      isAdditional,
-      haveCount,
-    });
+    filters.push(filterItem);
   });
 };
 
