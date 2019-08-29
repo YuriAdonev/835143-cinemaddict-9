@@ -65,7 +65,7 @@ const generateCard = (count) => ({
   title: titles[count],
   titleOriginal: `Original: ${titles[count]}`,
   description: generateDescription(),
-  rating: `8.3`,
+  rating: (Math.floor(Math.random() * 100) / 10).toString(),
   director: `Anthony Mann`,
   writers: `Anne Wigton, Heinz Heral, Richard Weil`,
   actors: `Erich von Stroheim, Mary Beth Hughes, Dan Duryea`,

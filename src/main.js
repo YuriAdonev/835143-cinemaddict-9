@@ -1,17 +1,62 @@
+import {render, unrender, Position} from "./components/utils";
 import {cards, filters} from './components/data';
-import {createSearchTemplate} from './components/search';
-import {createProfileTemplate} from './components/profile';
-import {createMainNavigationTemplate} from './components/main-navigation';
-import {createSortTemplate} from './components/sort';
-import {createFilmsTemplate} from './components/films';
-import {createShowMoreTemplate} from './components/show-more';
-import {createFilmCardTemplate} from './components/film-card';
-import {createFilmDetailsTemplate} from './components/film-details';
+import Search from './components/search';
+import Profile from './components/profile';
+import MainNavigation from './components/main-navigation';
+import Sort from './components/sort';
+import Films from './components/films';
+import ShowMore from './components/show-more';
+import Card from './components/film-card';
+import Details from './components/film-details';
 
 const DEFAULT_CARD_COUNT_TO_LOAD = 5;
+const TOP_RATED_COUNT = 2;
+const MOST_COMMENTED_COUNT = 2;
 
 let shownCards = 0;
 let totalCards = cards.length;
+
+const renderCard = (container, cardMock) => {
+  const card = new Card(cardMock);
+  const details = new Details(cardMock);
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      unrender(details.getElement());
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  card.getElement()
+    .querySelector(`.film-card__title`)
+    .addEventListener(`click`, () => {
+      render(document.querySelector(`body`), details.getElement(), Position.BEFOREEND);
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+  card.getElement()
+    .querySelector(`.film-card__poster`)
+    .addEventListener(`click`, () => {
+      render(document.querySelector(`body`), details.getElement(), Position.BEFOREEND);
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+  card.getElement()
+    .querySelector(`.film-card__comments`)
+    .addEventListener(`click`, () => {
+      render(document.querySelector(`body`), details.getElement(), Position.BEFOREEND);
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+  details.getElement()
+    .querySelector(`.film-details__close-btn`)
+    .addEventListener(`click`, () => {
+      unrender(details.getElement());
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
+
+  render(container, card.getElement(), Position.BEFOREEND);
+};
 
 const loadMoreCards = () => {
   let restCards = totalCards - shownCards;
@@ -29,17 +74,13 @@ const loadMoreCards = () => {
 
 const renderCards = (cardToShow) => {
   for (let i = 0; i < cardToShow; i++) {
-    render(document.querySelectorAll(`.films-list__container`)[0], createFilmCardTemplate(cards[shownCards]));
+    renderCard(document.querySelectorAll(`.films-list__container`)[0], cards[shownCards]);
     shownCards++;
   }
 };
 
 const hideCardsLoader = () => {
-  document.querySelector(`.films-list__show-more`).classList.add(`visually-hidden`);
-};
-
-const render = (container, block, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, block);
+  unrender(showMore.getElement());
 };
 
 const getProfileRating = () => {
@@ -64,26 +105,49 @@ const getProfileRating = () => {
   return rating;
 };
 
+const getTopRated = () => {
+  return cards.slice().sort((a, b) => {
+    return parseInt(b.rating, 10) - parseInt(a.rating, 10);
+  });
+};
+
+const getMostCommented = () => {
+  return cards.slice().sort((a, b) => {
+    return b.comments.length - a.comments.length;
+  });
+};
+
+const renderSortedCards = (container, count, arr) => {
+  for (let i = 0; i < count; i++) {
+    renderCard(container, arr[i]);
+  }
+};
+
 const showFooterStatistics = () => {
   document.querySelector(`.footer__statistics p`).textContent = `${cards.length} movies inside`;
 };
 
-render(document.querySelector(`.header`), createSearchTemplate());
-render(document.querySelector(`.header`), createProfileTemplate(getProfileRating()));
-render(document.querySelector(`.main`), createMainNavigationTemplate(filters));
-render(document.querySelector(`.main`), createSortTemplate());
-render(document.querySelector(`.main`), createFilmsTemplate());
-render(document.querySelector(`.films-list`), createShowMoreTemplate());
+const search = new Search();
+const profile = new Profile(getProfileRating());
+const mainNavigation = new MainNavigation(filters);
+const sort = new Sort();
+const films = new Films();
+const showMore = new ShowMore();
+
+render(document.querySelector(`.header`), search.getElement(), Position.BEFOREEND);
+render(document.querySelector(`.header`), profile.getElement(), Position.BEFOREEND);
+render(document.querySelector(`.main`), mainNavigation.getElement(), Position.BEFOREEND);
+render(document.querySelector(`.main`), sort.getElement(), Position.BEFOREEND);
+render(document.querySelector(`.main`), films.getElement(), Position.BEFOREEND);
+render(document.querySelector(`.films-list`), showMore.getElement(), Position.BEFOREEND);
 
 loadMoreCards();
 
-render(document.querySelectorAll(`.films-list__container`)[1], createFilmCardTemplate(cards[0]));
-render(document.querySelectorAll(`.films-list__container`)[2], createFilmCardTemplate(cards[1]));
-
-render(document.querySelector(`.footer`), createFilmDetailsTemplate(cards[0]), `afterend`);
+renderSortedCards(document.querySelectorAll(`.films-list__container`)[1], TOP_RATED_COUNT, getTopRated());
+renderSortedCards(document.querySelectorAll(`.films-list__container`)[2], MOST_COMMENTED_COUNT, getMostCommented());
 
 showFooterStatistics();
 
-document.querySelector(`.films-list__show-more`).addEventListener(`click`, () => {
+showMore.getElement().addEventListener(`click`, () => {
   loadMoreCards();
 });
