@@ -1,7 +1,8 @@
-import {createElement} from "./utils";
+import AbstractComponent from "./abstract";
 
-export default class Details {
+export default class Details extends AbstractComponent {
   constructor({poster, title, age, titleOriginal, rating, director, writers, actors, releaseDate, duration, country, description, isWatchlist, isFavorites, isWatched, comments, genres}) {
+    super();
     this._description = description;
     this._title = title;
     this._titleOriginal = titleOriginal;
@@ -19,15 +20,6 @@ export default class Details {
     this._isWatchlist = isWatchlist;
     this._isWatched = isWatched;
     this._isFavorites = isFavorites;
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
   }
 
   getTemplate() {
