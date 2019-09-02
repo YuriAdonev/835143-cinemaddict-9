@@ -1,17 +1,9 @@
-import {createElement} from "./utils";
+import AbstractComponent from "./abstract";
 
-export default class Profile {
+export default class Profile extends AbstractComponent {
   constructor(rating) {
+    super();
     this._rating = rating;
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
   }
 
   getTemplate() {

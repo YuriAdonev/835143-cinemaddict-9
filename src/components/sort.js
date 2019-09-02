@@ -1,16 +1,8 @@
-import {createElement} from "./utils";
+import AbstractComponent from "./abstract";
 
-export default class Sort {
+export default class Sort extends AbstractComponent {
   constructor() {
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+    super();
   }
 
   getTemplate() {
