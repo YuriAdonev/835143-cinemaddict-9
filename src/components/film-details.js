@@ -10,7 +10,7 @@ export default class Details extends AbstractComponent {
     this._comments = comments;
     this._genres = genres;
     this._duration = duration;
-    this._releaseDate = releaseDate;
+    this._releaseDate = new Date(releaseDate);
     this._rating = rating;
     this._age = age;
     this._director = director;
@@ -63,7 +63,7 @@ export default class Details extends AbstractComponent {
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">Release Date</td>
-                    <td class="film-details__cell">${this._releaseDate}</td>
+                    <td class="film-details__cell">${this._releaseDate.toDateString()}</td>
                   </tr>
                   <tr class="film-details__row">
                     <td class="film-details__term">Runtime</td>

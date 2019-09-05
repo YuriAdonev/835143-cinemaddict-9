@@ -70,7 +70,7 @@ const generateCard = (count) => ({
   writers: `Anne Wigton, Heinz Heral, Richard Weil`,
   actors: `Erich von Stroheim, Mary Beth Hughes, Dan Duryea`,
   year: `1945`,
-  releaseDate: `30 March 1945`,
+  releaseDate: Date.now() - (getRandomNumber(40) * 24 * 60 * 60 * 1000 * 365),
   duration: `1h 55m`,
   country: `USA`,
   genres: [

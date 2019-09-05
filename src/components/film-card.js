@@ -1,7 +1,7 @@
 import AbstractComponent from "./abstract";
 
 export default class Card extends AbstractComponent {
-  constructor({title, poster, description, comments, isWatchlist, isWatched, isFavorites, genres, duration, year, rating}) {
+  constructor({title, poster, description, comments, isWatchlist, isWatched, isFavorites, genres, duration, releaseDate, rating}) {
     super();
     this._description = description;
     this._title = title;
@@ -9,7 +9,7 @@ export default class Card extends AbstractComponent {
     this._comments = comments;
     this._genres = genres;
     this._duration = duration;
-    this._year = year;
+    this._releaseDate = new Date(releaseDate);
     this._rating = rating;
     this._isWatchlist = isWatchlist;
     this._isWatched = isWatched;
@@ -21,7 +21,7 @@ export default class Card extends AbstractComponent {
         <h3 class="film-card__title">${this._title}</h3>
         <p class="film-card__rating">${this._rating}</p>
         <p class="film-card__info">
-          <span class="film-card__year">${this._year}</span>
+          <span class="film-card__year">${this._releaseDate.getFullYear()}</span>
           <span class="film-card__duration">${this._duration}</span>
           <span class="film-card__genre">${this._genres[0]}</span>
         </p>

@@ -36,18 +36,15 @@ const showFooterStatistics = () => {
 const search = new Search();
 const profile = new Profile(getProfileRating());
 const mainNavigation = new MainNavigation(filters);
-const sort = new Sort();
-const films = new Films();
-
 
 render(document.querySelector(`.header`), search.getElement(), Position.BEFOREEND);
 render(document.querySelector(`.header`), profile.getElement(), Position.BEFOREEND);
 render(document.querySelector(`.main`), mainNavigation.getElement(), Position.BEFOREEND);
-render(document.querySelector(`.main`), sort.getElement(), Position.BEFOREEND);
-render(document.querySelector(`.main`), films.getElement(), Position.BEFOREEND);
+// render(document.querySelector(`.main`), sort.getElement(), Position.BEFOREEND);
+// render(document.querySelector(`.main`), films.getElement(), Position.BEFOREEND);
 
 showFooterStatistics();
 
-const pageController = new PageController(document.querySelector(`.films-list`), cards);
+const pageController = new PageController(document.querySelector(`.main`), cards);
 
 pageController.init();
